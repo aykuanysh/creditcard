@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"log"
+
+	"github.com/aykuanysh/creditcard/internal/app"
+)
 
 func main() {
-	fmt.Println("Start creditcard")
+	if err := app.Run(); err != nil {
+		log.Fatalf("Error: %v", err)
+	}
 }
