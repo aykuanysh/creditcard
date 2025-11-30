@@ -2,6 +2,7 @@ package app
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 
@@ -30,18 +31,13 @@ func Run() error {
 }
 
 func runValidate(args []string) error {
-	if len(args) < 1 {
-		return errors.New("please provide a card number to validate")
+	fs := flag.NewFlagSet("validate", flag.ContinueOnError)
+	useStdin := fs.Bool("stdin", false, "read from stdin")
+	if err := fs.Parse(args); err != nil {
+		return err
 	}
-
-	valid := validate.IsValidLuhn(args[0])
-	if valid {
-		fmt.Println("Card is valid")
-	} else {
-		fmt.Println("Card is invalid")
-	}
-	return nil
-
+	rest := fs.Args()
+	return validate.Handle(*useStdin, rest)
 }
 
 func runGenerate(args []string) error {
