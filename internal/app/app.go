@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aykuanysh/creditcard/internal/generate"
 	"github.com/aykuanysh/creditcard/internal/validate"
 )
 
@@ -41,7 +42,12 @@ func runValidate(args []string) error {
 }
 
 func runGenerate(args []string) error {
-	return fmt.Errorf("not implemented")
+	fs := flag.NewFlagSet("generate", flag.ContinueOnError)
+	pick := fs.Bool("pick", false, "pick random")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	return generate.Handle(*pick, fs.Args())
 }
 
 func runInformation(args []string) error {
