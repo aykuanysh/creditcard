@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/aykuanysh/creditcard/internal/generate"
+	"github.com/aykuanysh/creditcard/internal/info"
 	"github.com/aykuanysh/creditcard/internal/validate"
 )
 
@@ -51,7 +52,14 @@ func runGenerate(args []string) error {
 }
 
 func runInformation(args []string) error {
-	return fmt.Errorf("not implemented")
+	fs := flag.NewFlagSet("information", flag.ContinueOnError)
+	brands := fs.String("brands", "", "brands file")
+	issuers := fs.String("issuers", "", "issuers file")
+	stdin := fs.Bool("stdin", false, "read from stdin")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	return info.CardInfo(*brands, *issuers, *stdin, fs.Args())
 }
 
 func runIssue(args []string) error {
