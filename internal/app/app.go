@@ -8,6 +8,7 @@ import (
 
 	"github.com/aykuanysh/creditcard/internal/generate"
 	"github.com/aykuanysh/creditcard/internal/info"
+	"github.com/aykuanysh/creditcard/internal/issue"
 	"github.com/aykuanysh/creditcard/internal/validate"
 )
 
@@ -63,5 +64,13 @@ func runInformation(args []string) error {
 }
 
 func runIssue(args []string) error {
-	return fmt.Errorf("not implemented")
+	fs := flag.NewFlagSet("issue", flag.ContinueOnError)
+	brands := fs.String("brands", "", "brands file")
+	issuers := fs.String("issuers", "", "issuers file")
+	brandName := fs.String("brand", "", "brand")
+	issuerName := fs.String("issuer", "", "issuer")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	return issue.CardIssue(*brands, *issuers, *brandName, *issuerName)
 }
